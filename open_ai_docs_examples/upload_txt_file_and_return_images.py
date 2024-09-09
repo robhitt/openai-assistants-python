@@ -19,7 +19,7 @@ assistant = client.beta.assistants.create(
     name="S&P 500 Data Visualizer",
     # instructions="You are great at creating beautiful data visualizations. You analyze data present in .txt files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
     description="You are great at creating beautiful data visualizations. You analyze data present in .txt files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
-    model="gpt-4o",
+    model="gpt-4o-mini",
     tools=[{"type": "code_interpreter"}],
     tool_resources={
         "code_interpreter": {

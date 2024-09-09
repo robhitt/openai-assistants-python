@@ -1,3 +1,10 @@
+# Assistants have 3 specific types of TOOLS we can use:
+# 1. code_interpreter
+# 2. file_search
+# 3. function calling
+
+# In this example we are using the code_interpreter too
+# to upload a CSV file and return images
 import time
 import openai
 from dotenv import load_dotenv
@@ -15,9 +22,11 @@ file_id = file.id
 
 assistant = client.beta.assistants.create(
     name="S&P 500 Data Visualizer",
-    # instructions="You are great at creating beautiful data visualizations. You analyze data present in .csv files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
-    description="You are great at creating beautiful data visualizations. You analyze data present in .csv files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
-    model="gpt-4o",
+    instructions="Analyze data in the provided CSV file, create visualizations, and provide a summary of trends.",
+
+    # Description is more general, if both instructions and description are provided, the instructions are used.
+    # description="You are great at creating beautiful data visualizations. You analyze data present in .csv files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
+    model="gpt-4o-mini",
     tools=[{"type": "code_interpreter"}],
     tool_resources={
         "code_interpreter": {
@@ -36,11 +45,14 @@ thread = client.beta.threads.create()
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role="user",
-    content="Create 2 data visualizations based on the trends in this file.",
-    attachments=[{
-        "file_id": file_id,
-        "tools": [{"type": "code_interpreter"}]
-    }]
+    content="Create 2 data visualizations based on the trends in your file.",
+
+    # Since the assistant already has the file in its context, you can omit the attachments argument when creating the message,
+    # and the assistant will still be able to use the file for generating visualizations.
+    # attachments=[{
+    #     "file_id": file_id,
+    #     "tools": [{"type": "code_interpreter"}]
+    # }]
 )
 
 # https://platform.openai.com/docs/assistants/deep-dive/runs-and-run-steps
@@ -101,7 +113,7 @@ def display_thread_messages(thread_messages):
 display_thread_messages(messages)
 
 # Delete Recent File
-# client.files.delete(file_id)
+client.files.delete(file_id)
 
 # Recent Assistant
-# client.beta.assistants.delete(assistant_id)
+client.beta.assistants.delete(assistant_id)
