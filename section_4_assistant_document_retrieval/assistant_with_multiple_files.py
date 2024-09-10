@@ -8,7 +8,7 @@ from openai import OpenAI
 load_dotenv()
 client = OpenAI()
 
-# If you want to delete all assistants on server programattically
+# If you want to delete all assistants on server programmatically
 # my_assistants = client.beta.assistants.list(order='desc')
 #
 # for assistant in my_assistants:
@@ -18,7 +18,7 @@ client = OpenAI()
 
 # Initial upload of files, only do once so commenting out
 # current_dir = pathlib.Path(__file__).parent
-# relative_path = '../course-docs/02-Assistant-with-Knowledge-Retrieval/02-Multiple-Files'
+# relative_path = '../admin_course_docs/02-Assistant-with-Knowledge-Retrieval/02-Multiple-Files'
 #
 # files_to_upload = [
 #     'ACME Advertising Policy.pdf',
@@ -36,43 +36,40 @@ client = OpenAI()
 # for file in files_to_upload:
 #     upload_assistant_file(file)
 
-# file-IHe4TN3qKBbk4MLH6WcT8v1M
-# file-uPmZvHVmq8wP3l4u1OjiCTxv
-# file-fylsmz0nCUnUk64tzXjMTUFR
-
 # for file in client.files.list():
 #     print(file.filename)
 #     print(file.id)
 #     print("\n")
 
 # assistant = client.beta.assistants.create(
-#     name='add name here'
+#     name='add name here',
 #     instructions='You answer information about the company based on the PDF documents available in your knowledge base.',
 #     model='gpt-3.5-turbo-1106',
-#     tools=[{'type': 'file_search'}, {'type': 'code_interpreter'}],
+#     tools=[{'type': 'code_interpreter'}],
 #     tool_resources={
 #         "code_interpreter": {
 #             "file_ids": [
-#                 'file-IHe4TN3qKBbk4MLH6WcT8v1M',
-#                 'file-uPmZvHVmq8wP3l4u1OjiCTxv',
-#                 'file-fylsmz0nCUnUk64tzXjMTUFR'
+#                 'file-eN9ypRlzfOCCYkeHZgGOIS4c',
+#                 'file-jyE06HBgIXw9GlykuOTFlqPj',
+#                 'file-mzvlITlrLZdOuj4DcY5MYicq'
 #             ]
 #         }
 #     }
 # )
 
-assistant_id = 'asst_2urNcRd6jmOCTufuAuUjaS8X'
+assistant_id = 'asst_Lq7tg8HNFyotkXQlhRLctqff'
 
 thread = client.beta.threads.create()
 
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role='user',
-    content='Does our dog food allow for artificial ingredients?',
+    # content='Does our dog food allow for artificial ingredients?',
+    content='What is our travel policy about using Lyft and Uber?',
     attachments=[
-        {'file_id': "file-IHe4TN3qKBbk4MLH6WcT8v1M", 'tools': [{'type': 'file_search'}, {"type": "code_interpreter"}]},
-        {'file_id': "file-uPmZvHVmq8wP3l4u1OjiCTxv", 'tools': [{'type': 'file_search'}, {"type": "code_interpreter"}]},
-        {'file_id': "file-fylsmz0nCUnUk64tzXjMTUFR", 'tools': [{'type': 'file_search'}, {"type": "code_interpreter"}]},
+        {'file_id': "file-eN9ypRlzfOCCYkeHZgGOIS4c", 'tools': [{"type": "code_interpreter"}]},
+        {'file_id': "file-jyE06HBgIXw9GlykuOTFlqPj", 'tools': [{"type": "code_interpreter"}]},
+        {'file_id': "file-mzvlITlrLZdOuj4DcY5MYicq", 'tools': [{"type": "code_interpreter"}]},
     ]
 )
 

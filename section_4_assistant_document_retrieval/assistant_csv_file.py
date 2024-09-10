@@ -9,7 +9,7 @@ load_dotenv()
 
 # Construct the relative path to the file
 current_dir = pathlib.Path(__file__).parent
-relative_path = '../course-docs/02-Assistant-with-Knowledge-Retrieval/SP500_Prices_5Year.csv'
+relative_path = '../admin_course_docs/02-Assistant-with-Knowledge-Retrieval/SP500_Prices_5Year.csv'
 filename = (current_dir / relative_path).resolve()
 
 client = OpenAI()
@@ -18,15 +18,14 @@ file = client.files.create(
     file=open(filename, 'rb'),
     purpose='assistants'
 )
-file_id = file.id
-# file_id = "file-282zPwA8evcOwO6XDw3Bydw4"
+file_id = file.id  # ''
 
 assistant = client.beta.assistants.create(
     name="Stock visualizer",
     instructions="Use this csv file to use code to help visualize stock data",
     model="gpt-4o-mini",
     # tools=[{'type': 'file_search'}],  # OpenAI no longer handles file_search for csv files, converted to txt
-    tools=[{'type': 'file_search'}, {'type': 'code_interpreter'}],
+    tools=[{'type': 'code_interpreter'}],
     tool_resources={
         "code_interpreter": {
             "file_ids": [file_id]
@@ -42,12 +41,10 @@ message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role='user',
     content='Can you create a plot of the historical adjusted closing price of the S&P 500? The first row in the file are the column names separated by commas. All the data is comma separated similar to a CSV file.',
-    # content='Can you print out the first few rows of this text file?',
-    # attachments=[{
-    #     'file_id': file_id,
-    #     'tools': [{'type': 'file_search'}, {"type": "code_interpreter"}],
-    #     # 'tools': [{'type': 'file_search'}],  # Since csv files are no longer handles, use txt
-    # }]
+    attachments=[{
+        'file_id': file_id,
+        'tools': [{"type": "code_interpreter"}],
+    }]
 )
 
 run = client.beta.threads.runs.create(

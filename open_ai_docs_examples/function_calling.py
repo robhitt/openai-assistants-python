@@ -13,9 +13,9 @@ load_dotenv()
 
 client = openai.OpenAI()
 
+
 def word_definition_quiz(word, definition_options):
     print("Welcome to the word definition quiz!")
     print(f"What is the correct definition of the word: {word}?")
 
     word_definition_quiz([])
-

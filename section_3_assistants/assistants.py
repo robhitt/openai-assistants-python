@@ -15,14 +15,7 @@ assistant = client.beta.assistants.create(
 
 thread = client.beta.threads.create()
 
-print("=======================================")
-
-print("assistant.id: ", assistant.id)
-print("thread.id: ", thread.id)
-
-print("=======================================")
-
-# Note you always 'create' a new messages even when you're adding to an existing thread
+# Note: you always 'create' a new messages even when you're adding to an existing thread
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role='user',
@@ -35,23 +28,15 @@ run = client.beta.threads.runs.create(
     # instructions=''  # You can override initial asst instructions here
 )
 
-print("run.status: ", run.status)
-print("run.id: ", run.id)
-
-print("=======================================")
-
 run = client.beta.threads.runs.retrieve(
     thread_id=thread.id,
     run_id=run.id
 )
 
-print(run.status)
-
 print("=======================================")
 
 messages = client.beta.threads.messages.list(thread_id=thread.id)
 print("messages", messages)
-# print("most recent message: ", messages.data[0].content[0].text.value)
 
 for thread_message in messages.data:
     print("\n")
